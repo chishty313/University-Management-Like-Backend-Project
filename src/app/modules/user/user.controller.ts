@@ -8,8 +8,6 @@ const createStudent = catchAsync(async (req, res) => {
   // Creating a schema validation using zod
   const { password, student: studentData } = req.body;
 
-  // const zodParsedData = StudentValidationSchema.parse(studentData);
-
   // // data validation using joi
   // const { error, value } = StudentValidationSchema.validate(studentData);
 
