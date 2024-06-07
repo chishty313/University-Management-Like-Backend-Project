@@ -13,7 +13,8 @@ const getAllStudents = async (
   try {
     const result = await StudentServices.getAllStudentsFromDB();
 
-    res.status(200).json({
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
       success: true,
       message: 'Students data retrived successfully',
       data: result,
