@@ -31,6 +31,11 @@ const getSingleStudentFromDB = async (id: string) => {
 };
 
 const deleteStudentFromDB = async (id: string) => {
+  const isUserIdExist = await User.findOne({ id });
+  const isStudentIdExist = await Student.findOne({ id });
+  if (!isUserIdExist || !isStudentIdExist) {
+    throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+  }
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
