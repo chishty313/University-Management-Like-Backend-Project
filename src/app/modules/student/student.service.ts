@@ -103,8 +103,6 @@ const updateStudentIntoDB = async (
     }
   }
 
-  console.log(modifiedUpdatedData);
-
   const result = await Student.findOneAndUpdate(
     { id: studentId },
     modifiedUpdatedData,
