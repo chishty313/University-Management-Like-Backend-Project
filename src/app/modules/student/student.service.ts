@@ -6,40 +6,40 @@ import { User } from '../user/user.model';
 import { TStudent } from './student.interface';
 
 const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
-  console.log({ queryFromStudentServiceGetAllStudentsFromDB: query });
-  const queryObj = { ...query }; // copy
+  // console.log({ queryFromStudentServiceGetAllStudentsFromDB: query });
+  // const queryObj = { ...query }; // copy
 
   // { email: { $regex: query.searchTerm, $options: 'i' } }
   // { presentAddress: { $regex: query.searchTerm, $options: 'i' } }
   // { 'name.firstName': { $regex: query.searchTerm, $options: 'i' } }
-  const studentSearchableFields = ['email', 'name.firstName', 'presentAddress'];
-  let searchTerm = '';
+  // const studentSearchableFields = ['email', 'name.firstName', 'presentAddress'];
+  // let searchTerm = '';
 
-  if (query?.searchTerm) {
-    searchTerm = query?.searchTerm as string;
-  }
+  // if (query?.searchTerm) {
+  //   searchTerm = query?.searchTerm as string;
+  // }
 
-  const searchQuery = Student.find({
-    $or: studentSearchableFields.map((field) => ({
-      [field]: { $regex: searchTerm, $options: 'i' },
-    })),
-  });
+  // const searchQuery = Student.find({
+  //   $or: studentSearchableFields.map((field) => ({
+  //     [field]: { $regex: searchTerm, $options: 'i' },
+  //   })),
+  // });
 
   // filtering
-  const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
-  excludeFields.forEach((elem) => delete queryObj[elem]);
-  console.log({ basicQuery: query, afterExcludingQuery: queryObj });
+  // const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
+  // excludeFields.forEach((elem) => delete queryObj[elem]);
+  // console.log({ basicQuery: query, afterExcludingQuery: queryObj });
 
-  const filterQuery = searchQuery
-    .find(queryObj)
-    .populate('admissionSemester')
-    .populate({
-      path: 'academicDepartment',
-      populate: {
-        path: 'academicFaculty',
-      },
-    })
-    .populate('user');
+  // const filterQuery = searchQuery
+  //   .find(queryObj)
+  //   .populate('admissionSemester')
+  //   .populate({
+  //     path: 'academicDepartment',
+  //     populate: {
+  //       path: 'academicFaculty',
+  //     },
+  //   })
+  //   .populate('user');
 
   let sort = '-createdAt';
 
