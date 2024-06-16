@@ -31,7 +31,7 @@ export type TFaculty = {
   presentAddress: string;
   permanentAddress: string;
   profileImage?: string;
-  bloogGroup?: TBloodGroup;
+  bloodgGroup?: TBloodGroup;
   academicDepartment: Types.ObjectId;
   isDeleted: boolean;
 };
