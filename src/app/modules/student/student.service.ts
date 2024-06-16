@@ -4,6 +4,8 @@ import AppError from '../../errors/AppError';
 import httpStatus from 'http-status';
 import { User } from '../user/user.model';
 import { TStudent } from './student.interface';
+import QueryBuilder from '../../builder/QueryBuilder';
+import { studentSearchableFields } from './student.constant';
 
 const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
   // console.log({ queryFromStudentServiceGetAllStudentsFromDB: query });
@@ -41,42 +43,62 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
   //   })
   //   .populate('user');
 
-  let sort = '-createdAt';
+  // let sort = '-createdAt';
 
-  if (query.sort) {
-    sort = query.sort as string;
-  }
+  // if (query.sort) {
+  //   sort = query.sort as string;
+  // }
 
-  const sortQuery = filterQuery.sort(sort);
+  // const sortQuery = filterQuery.sort(sort);
 
-  let page = 1;
-  let limit = 1;
-  let skip = 0;
+  // let page = 1;
+  // let limit = 1;
+  // let skip = 0;
 
-  if (query.limit) {
-    limit = Number(query.limit);
-  }
+  // if (query.limit) {
+  //   limit = Number(query.limit);
+  // }
 
-  if (query.page) {
-    page = Number(query.page);
-    skip = (page - 1) * limit;
-  }
+  // if (query.page) {
+  //   page = Number(query.page);
+  //   skip = (page - 1) * limit;
+  // }
 
-  const limitQuery = sortQuery.limit(limit);
+  // const limitQuery = sortQuery.limit(limit);
 
-  const paginateQuery = limitQuery.skip(skip);
+  // const paginateQuery = limitQuery.skip(skip);
 
-  // field limiting
-  let fields = '-__v';
+  // // field limiting
+  // let fields = '-__v';
 
-  if (query.fields) {
-    fields = (query.fields as string).split(',').join(' ');
-    console.log({ fields });
-  }
+  // if (query.fields) {
+  //   fields = (query.fields as string).split(',').join(' ');
+  //   console.log({ fields });
+  // }
 
-  const fieldQuery = await paginateQuery.select(fields);
+  // const fieldQuery = await paginateQuery.select(fields);
 
-  return fieldQuery;
+  // return fieldQuery;
+
+  const studentQuery = new QueryBuilder(
+    Student.find()
+      .populate('admissionSemester')
+      .populate({
+        path: 'academicDepartment',
+        populate: {
+          path: 'academicFaculty',
+        },
+      }),
+    query,
+  )
+    .search(studentSearchableFields)
+    .filter()
+    .sort()
+    .fields()
+    .paginate();
+
+  const result = await studentQuery.modelQuery;
+  return result;
 };
 
 const getSingleStudentFromDB = async (id: string) => {
