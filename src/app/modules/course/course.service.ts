@@ -21,11 +21,15 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
 };
 
 const getSingleCourseFromDB = async (id: string) => {
-  return await Course.findById(id);
+  return await Course.findById(id).populate('preRequisiteCourses.course');
 };
 
 const deleteCourseFromDB = async (id: string) => {
-  return await Course.findByIdAndUpdate(id, { isDeleted: true }, { new: true });
+  return await Course.findByIdAndUpdate(
+    id,
+    { isDeleted: true },
+    { new: true },
+  ).populate('preRequisiteCourses.course');
 };
 
 export const CourseServices = {
