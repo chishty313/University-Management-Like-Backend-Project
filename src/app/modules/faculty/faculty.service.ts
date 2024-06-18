@@ -22,7 +22,7 @@ const getAllFacultiesFromDB = async (query: Record<string, unknown>) => {
 };
 
 const getSingleFacultyFromDB = async (facultyId: string) => {
-  return await Faculty.findOne({ id: facultyId }).populate(
+  return await Faculty.findByIdAndUpdate({ _id: facultyId }).populate(
     'academicDepartment',
   );
 };
@@ -43,10 +43,14 @@ const updateFacultyIntoDB = async (
     }
   }
 
-  return await Faculty.findOneAndUpdate({ id: facultyId }, modifiedUpdateData, {
-    new: true,
-    runValidators: true,
-  });
+  return await Faculty.findByIdAndUpdate(
+    { _id: facultyId },
+    modifiedUpdateData,
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
 };
 
 const deleteFacultyFromDB = async (facultyId: string) => {
@@ -55,8 +59,8 @@ const deleteFacultyFromDB = async (facultyId: string) => {
   try {
     session.startTransaction();
 
-    const deletedFaculty = await Faculty.findOneAndUpdate(
-      { id: facultyId },
+    const deletedFaculty = await Faculty.findByIdAndUpdate(
+      facultyId,
       { isDeleted: true },
       { new: true, session },
     );
@@ -65,9 +69,10 @@ const deleteFacultyFromDB = async (facultyId: string) => {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to deleted faculty');
     }
 
-    const userId = deletedFaculty.id;
-    const deletedUser = await User.findOneAndUpdate(
-      { id: userId },
+    const userId = deletedFaculty.user;
+
+    const deletedUser = await User.findByIdAndUpdate(
+      userId,
       { isDeleted: true },
       { new: true, session },
     );
