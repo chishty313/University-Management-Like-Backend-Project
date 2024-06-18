@@ -32,9 +32,23 @@ const deleteCourseFromDB = async (id: string) => {
   ).populate('preRequisiteCourses.course');
 };
 
+const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
+  const { preRequisiteCourses, ...courseRemainingData } = payload;
+
+  // step - 1: basic course info update
+  const updatedBasicCourseinfo = await Course.findByIdAndUpdate(
+    id,
+    courseRemainingData,
+    { new: true, runValidators: true },
+  ).populate('preRequisiteCourses.course');
+
+  return updatedBasicCourseinfo;
+};
+
 export const CourseServices = {
   createCourseIntoDB,
   getAllCoursesFromDB,
   getSingleCourseFromDB,
   deleteCourseFromDB,
+  updateCourseIntoDB,
 };
