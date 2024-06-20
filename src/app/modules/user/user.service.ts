@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import config from '../../config';
-import { TAcademicSemester } from '../academicSemester/academicSemester.interface';
 import { AcademicSemester } from '../academicSemester/academicSemester.model';
 import { TStudent } from '../student/student.interface';
 import { Student } from '../student/student.model';
@@ -40,6 +39,13 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
     payload.admissionSemester,
   );
 
+  if (!admissionSemester) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      'Admission semester not found !!!',
+    );
+  }
+
   const session = await mongoose.startSession();
 
   try {
@@ -72,7 +78,7 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
   } catch (error) {
     await session.abortTransaction();
     await session.endSession();
-    throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create student');
+    throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create student user');
   }
 };
 
