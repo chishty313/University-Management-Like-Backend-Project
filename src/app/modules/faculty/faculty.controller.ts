@@ -5,6 +5,7 @@ import { FacultyServices } from './faculty.service';
 
 const getAllFaculties = catchAsync(async (req, res) => {
   console.log('test', req.user);
+  console.log(req.cookies);
   const getAllFacultiesResult = await FacultyServices.getAllFacultiesFromDB(
     req.query,
   );
