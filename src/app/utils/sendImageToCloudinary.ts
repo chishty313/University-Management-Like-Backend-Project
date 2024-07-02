@@ -1,48 +1,40 @@
 import { v2 as cloudinary } from 'cloudinary';
 import config from '../config';
 import multer from 'multer';
+import fs from 'fs';
 
-export const sendImageToCloudinary = () => {
-  (async function () {
-    // Configuration
-    cloudinary.config({
-      cloud_name: config.cloudinary_cloud_name,
-      api_key: config.cloudinary_api_key,
-      api_secret: config.cloudinary_api_secret,
-    });
+// Configuration
+cloudinary.config({
+  cloud_name: config.cloudinary_cloud_name,
+  api_key: config.cloudinary_api_key,
+  api_secret: config.cloudinary_api_secret,
+});
 
+export const sendImageToCloudinary = async (
+  imageName: string,
+  path: string,
+) => {
+  return new Promise((resolve, reject) => {
     // Upload an image
-    const uploadResult = await cloudinary.uploader
-      .upload(
-        'https://res.cloudinary.com/demo/image/upload/getting-started/shoes.jpg',
-        {
-          public_id: 'shoes',
-        },
-      )
-      .catch((error) => {
-        console.log(error);
-      });
-
-    console.log(uploadResult);
-
-    // Optimize delivery by resizing and applying auto-format and auto-quality
-    const optimizeUrl = cloudinary.url('shoes', {
-      fetch_format: 'auto',
-      quality: 'auto',
-    });
-
-    console.log(optimizeUrl);
-
-    // Transform the image: auto-crop to square aspect_ratio
-    const autoCropUrl = cloudinary.url('shoes', {
-      crop: 'auto',
-      gravity: 'auto',
-      width: 500,
-      height: 500,
-    });
-
-    console.log(autoCropUrl);
-  })();
+    cloudinary.uploader.upload(
+      path,
+      { public_id: imageName },
+      function (error, result) {
+        if (error) {
+          reject(error);
+        }
+        resolve(result);
+        // delete a file asynchronously
+        fs.unlink(path, (error) => {
+          if (error) {
+            reject(error);
+          } else {
+            console.log('File is deleted');
+          }
+        });
+      },
+    );
+  });
 };
 
 const storage = multer.diskStorage({
