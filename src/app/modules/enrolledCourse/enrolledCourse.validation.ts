@@ -2,14 +2,7 @@ import { z } from 'zod';
 
 const createEnrolledCourseValidationSchema = z.object({
   body: z.object({
-    semesterRegistration: z.string(),
-    academicSemester: z.string(),
-    academicFaculty: z.string(),
-    academicDepartment: z.string(),
     offeredCourse: z.string(),
-    course: z.string(),
-    student: z.string(),
-    faculty: z.string(),
   }),
 });
 
