@@ -14,8 +14,7 @@ const enrolledCourse = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Student is enrolled successfully',
-    // data: enrolledCourseResult,
-    data: null,
+    data: enrolledCourseResult,
   });
 });
 
