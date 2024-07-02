@@ -17,7 +17,7 @@ import { AcademicDepartment } from '../academicDepartment/academicDepartment.mod
 import { Faculty } from '../faculty/faculty.model';
 import { TAdmin } from '../admin/admin.interface';
 import { Admin } from '../admin/admin.model';
-import { verifyToken } from '../auth/auth.utils';
+import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
 
 const createStudentIntoDB = async (password: string, payload: TStudent) => {
   // Create a user object
@@ -56,6 +56,9 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
     // Set generated ID
     userData.id = await generateStudentId(admissionSemester);
 
+    // send image to cloudinary
+    sendImageToCloudinary();
+
     // create a user (transaction - 01)
     const newUser = await User.create([userData], { session }); // Built in static method
 
@@ -70,14 +73,14 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
     payload.user = newUser[0]._id; // Reference _id
 
     // create a student (transaction - 02)
-    const newStudent = await Student.create([payload], { session });
+    // const newStudent = await Student.create([payload], { session });
 
-    if (!newStudent.length) {
-      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create student');
-    }
-    await session.commitTransaction();
-    await session.endSession();
-    return newStudent;
+    // if (!newStudent.length) {
+    //   throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create student');
+    // }
+    // await session.commitTransaction();
+    // await session.endSession();
+    // return newStudent;
   } catch (error) {
     await session.abortTransaction();
     await session.endSession();
@@ -196,11 +199,7 @@ const createAdminIntoDB = async (password: string, payload: TAdmin) => {
   }
 };
 
-const getMeFromDB = async (token: string) => {
-  const decoded = verifyToken(token, config.jwt_access_secrect as string);
-
-  const { userId, role } = decoded;
-
+const getMeFromDB = async (userId: string, role: string) => {
   if (role === 'student') {
     return await Student.findOne({ id: userId })
       .populate('user')
@@ -215,9 +214,15 @@ const getMeFromDB = async (token: string) => {
   }
 };
 
+const changeStatusIntoDB = async (id: string, payload: { status: string }) => {
+  const result = await User.findByIdAndUpdate(id, payload, { new: true });
+  return result;
+};
+
 export const UserServices = {
   createStudentIntoDB,
   createFacultyIntoDB,
   createAdminIntoDB,
   getMeFromDB,
+  changeStatusIntoDB,
 };
