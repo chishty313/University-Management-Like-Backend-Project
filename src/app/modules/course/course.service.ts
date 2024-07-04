@@ -88,7 +88,7 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
         (el) => el.course && !el.isDeleted,
       );
 
-      const newPreRequisitesCourses = await Course.findByIdAndUpdate(
+      await Course.findByIdAndUpdate(
         id,
         {
           $addToSet: { preRequisiteCourses: { $each: newPreRequisites } },
@@ -129,6 +129,12 @@ const assignFacultiesWithCourseIntoDB = async (
   );
 };
 
+const getFacultiesWithCourseFromDB = async (courseId: string) => {
+  return await CourseFaculty.findOne({ course: courseId }).populate(
+    'faculties',
+  );
+};
+
 const removeFacultiesFromCourseFromDB = async (
   id: string,
   payload: Partial<TCourseFaculty>,
@@ -150,4 +156,5 @@ export const CourseServices = {
   updateCourseIntoDB,
   assignFacultiesWithCourseIntoDB,
   removeFacultiesFromCourseFromDB,
+  getFacultiesWithCourseFromDB,
 };

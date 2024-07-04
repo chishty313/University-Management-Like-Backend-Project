@@ -22,6 +22,7 @@ const getAllSemesterRegistrations = catchAsync(async (req, res) => {
     await SemesterRegistrationServices.getAllSemesterRegistrationsFromDB(
       req.query,
     );
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -35,6 +36,7 @@ const getSingleSemesterRegistration = catchAsync(async (req, res) => {
     await SemesterRegistrationServices.getSingleSemesterRegistrationFromDB(
       req.params.semesterId,
     );
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -49,6 +51,7 @@ const updateSemesterRegistration = catchAsync(async (req, res) => {
       req.params.semesterId,
       req.body,
     );
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -62,6 +65,7 @@ const deleteSemesterRegistration = catchAsync(async (req, res) => {
     await SemesterRegistrationServices.deleteSemesterRegistrationFromDB(
       req.params.semesterId,
     );
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

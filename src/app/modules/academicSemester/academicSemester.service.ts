@@ -1,10 +1,7 @@
 import httpStatus from 'http-status';
 import AppError from '../../errors/AppError';
 import { academicSemesterNameCodeMapper } from './academicSemester.constant';
-import {
-  TAcademicSemester,
-  TAcademicSemesterNameCodeMapper,
-} from './academicSemester.interface';
+import { TAcademicSemester } from './academicSemester.interface';
 import { AcademicSemester } from './academicSemester.model';
 
 const createAcademicSemesterIntoDB = async (payload: TAcademicSemester) => {

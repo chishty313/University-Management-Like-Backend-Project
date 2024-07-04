@@ -1,13 +1,13 @@
 import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
-import router from '../../routes';
 import { AcademicSemesterServices } from './academicSemester.service';
 
 const createAcademicSemester = catchAsync(async (req, res) => {
   const result = await AcademicSemesterServices.createAcademicSemesterIntoDB(
     req.body,
   );
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -19,6 +19,7 @@ const createAcademicSemester = catchAsync(async (req, res) => {
 const getAllAcademicSemesters = catchAsync(async (req, res) => {
   const allFetchedAcademicSemestersResult =
     await AcademicSemesterServices.getAllAcademicSemestersFromDB();
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -32,6 +33,7 @@ const getSingleAcademicSemestersById = catchAsync(async (req, res) => {
     await AcademicSemesterServices.getSingleAcademicSemesterByIdFromDB(
       req.params.semesterId,
     );
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -46,6 +48,7 @@ const updateSingleAcademicSemesterPartialInfo = catchAsync(async (req, res) => {
       req.params.semesterId,
       req.body,
     );
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
