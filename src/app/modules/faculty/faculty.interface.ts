@@ -33,6 +33,7 @@ export type TFaculty = {
   profileImage?: string;
   bloodgGroup?: TBloodGroup;
   academicDepartment: Types.ObjectId;
+  academicFaculty: Types.ObjectId;
   isDeleted: boolean;
 };
 

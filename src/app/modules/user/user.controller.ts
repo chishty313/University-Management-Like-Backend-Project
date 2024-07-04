@@ -4,20 +4,14 @@ import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 
 const createStudent = catchAsync(async (req, res) => {
-  // Creating a schema validation using zod
   const { password, student: studentData } = req.body;
 
-  // // data validation using joi
-  // const { error, value } = StudentValidationSchema.validate(studentData);
-
-  //   Will call service function to send this data
   const result = await UserServices.createStudentIntoDB(
     req.file,
     password,
     studentData,
   );
 
-  // Send response
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -70,7 +64,6 @@ const getMe = catchAsync(async (req, res) => {
 });
 
 const changeStatus = catchAsync(async (req, res) => {
-  console.log(req.params.id, req.body);
   const changeStatusResult = await UserServices.changeStatusIntoDB(
     req.params.id,
     req.body,
