@@ -11,7 +11,10 @@ const loginUser = catchAsync(async (req, res) => {
   res.cookie('refreshToken', refreshToken, {
     secure: config.NODE_ENV === 'production',
     httpOnly: true,
+    sameSite: 'none',
+    maxAge: 1000 * 60 * 60 * 24 * 365,
   });
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -29,6 +32,7 @@ const changePassword = catchAsync(async (req, res) => {
     req.user,
     passwordData,
   );
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -41,6 +45,7 @@ const refreshToken = catchAsync(async (req, res) => {
   const { refreshToken } = req.cookies;
   const refreshTokenResult =
     await AuthServices.refreshTokenIntoDB(refreshToken);
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -51,6 +56,7 @@ const refreshToken = catchAsync(async (req, res) => {
 
 const forgetPassword = catchAsync(async (req, res) => {
   const forgetPasswordResult = await AuthServices.forgetPassword(req.body.id);
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -63,7 +69,7 @@ const resetPassword = catchAsync(async (req, res) => {
   const token = req.headers.authorization;
   const resetPasswordResult = await AuthServices.resetPasswordIntoDB(
     req.body,
-    token,
+    token as string,
   );
   sendResponse(res, {
     statusCode: httpStatus.OK,

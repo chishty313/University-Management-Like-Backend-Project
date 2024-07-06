@@ -6,6 +6,7 @@ import { AcademicDepartmentServices } from './academicDepartment.service';
 const createAcademicDepartment = catchAsync(async (req, res) => {
   const createdAcademicDepartmentResult =
     await AcademicDepartmentServices.createAcademicDepartmentIntoDB(req.body);
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -16,12 +17,14 @@ const createAcademicDepartment = catchAsync(async (req, res) => {
 
 const getAllAcademicDepartments = catchAsync(async (req, res) => {
   const getAllAcademicDepartmentsResult =
-    await AcademicDepartmentServices.getAllAcademicDepartmentsFromDB();
+    await AcademicDepartmentServices.getAllAcademicDepartmentsFromDB(req.query);
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'All academic departments are fetched successfully !!!',
-    data: getAllAcademicDepartmentsResult,
+    meta: getAllAcademicDepartmentsResult.meta,
+    data: getAllAcademicDepartmentsResult.result,
   });
 });
 
@@ -30,6 +33,7 @@ const getSingleAcademicDepartment = catchAsync(async (req, res) => {
     await AcademicDepartmentServices.getSingleAcademicDepartmentFromDB(
       req.params.departmentId,
     );
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -44,6 +48,7 @@ const updateAcademicDepartment = catchAsync(async (req, res) => {
       req.params.departmentId,
       req.body,
     );
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

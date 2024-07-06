@@ -6,6 +6,7 @@ import { AcademicFacultyServices } from './academicFaculty.service';
 const createAcademicFaculty = catchAsync(async (req, res) => {
   const createdAcademicFacultyResult =
     await AcademicFacultyServices.createAcademicFacultyIntoDB(req.body);
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -17,11 +18,13 @@ const createAcademicFaculty = catchAsync(async (req, res) => {
 const getAllAcademicFaculties = catchAsync(async (req, res) => {
   const getAllAcademicFacultiesResult =
     await AcademicFacultyServices.getAllAcademicFacultiesFromDB();
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'All academic faculty is fetched successfully !!!',
-    data: getAllAcademicFacultiesResult,
+    meta: getAllAcademicFacultiesResult.meta,
+    data: getAllAcademicFacultiesResult.result,
   });
 });
 
@@ -30,6 +33,7 @@ const getSingleAcademicFaculty = catchAsync(async (req, res) => {
     await AcademicFacultyServices.getSingleAcademicFacultyFromDB(
       req.params.facultyId,
     );
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -44,6 +48,7 @@ const updateAcademicFaculty = catchAsync(async (req, res) => {
       req.params.facultyId,
       req.body,
     );
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

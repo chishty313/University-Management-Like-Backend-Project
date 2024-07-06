@@ -1,9 +1,10 @@
 import { TErrorSources, TGenericErrorResponse } from '../interface/error';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const handleDuplicateError = (error: any): TGenericErrorResponse => {
-  const regex = /"([^"]+)"/;
+  const regex = /"([^"]*)"/;
   const match = error.message.match(regex);
-  let extractedMessage = match[1];
+  const extractedMessage = match && match[1];
   const errorSources: TErrorSources = [
     {
       path: '',
@@ -13,7 +14,7 @@ const handleDuplicateError = (error: any): TGenericErrorResponse => {
   const statusCode = 400;
   return {
     statusCode,
-    message: 'Duplicate error',
+    message: 'Invalid ID',
     errorSources,
   };
 };

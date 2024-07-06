@@ -13,7 +13,13 @@ router.post(
   validateRequest(
     EnrolledCourseValidations.createEnrolledCourseValidationSchema,
   ),
-  EnrolledCourseControllers.enrolledCourse,
+  EnrolledCourseControllers.createEnrolledCourse,
+);
+
+router.get(
+  '/my-enrolled-courses',
+  auth(USER_ROLE.student),
+  EnrolledCourseControllers.getMyEnrolledCourses,
 );
 
 router.patch(

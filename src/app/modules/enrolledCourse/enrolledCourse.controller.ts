@@ -3,7 +3,7 @@ import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { EnrolledCourseServices } from './enrolledCourse.service';
 
-const enrolledCourse = catchAsync(async (req, res) => {
+const createEnrolledCourse = catchAsync(async (req, res) => {
   const enrolledCourseResult =
     await EnrolledCourseServices.createEnrolledCourseIntoDB(
       req.user.userId,
@@ -15,6 +15,22 @@ const enrolledCourse = catchAsync(async (req, res) => {
     success: true,
     message: 'Student is enrolled successfully',
     data: enrolledCourseResult,
+  });
+});
+
+const getMyEnrolledCourses = catchAsync(async (req, res) => {
+  const enrolledCourseResult =
+    await EnrolledCourseServices.getMyEnrolledCoursesFromDB(
+      req.user.userId,
+      req.query,
+    );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Enrolled courses are retrivied succesfully',
+    meta: enrolledCourseResult.meta,
+    data: enrolledCourseResult.result,
   });
 });
 
@@ -35,6 +51,7 @@ const updateEnrolledCourseMarks = catchAsync(async (req, res) => {
 });
 
 export const EnrolledCourseControllers = {
-  enrolledCourse,
+  createEnrolledCourse,
   updateEnrolledCourseMarks,
+  getMyEnrolledCourses,
 };
